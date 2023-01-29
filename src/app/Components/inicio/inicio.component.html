@@ -1,0 +1,177 @@
+<div class="container">
+  <div class="row">
+    <div class="col-4"></div>
+    <div class="col-8">
+      <p class="fs-1 text">Lista de alumnos</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-4">
+      <app-sidebar></app-sidebar>
+    </div>
+    <div class="col-8">
+      <table class="table table-striped table-bordered">
+        <thead class="table-dark">
+          <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Apellido</th>
+            <th scope="col">Email</th>
+            <th scope="col">Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let alumno of alumnos">
+            <td>{{ alumno.id }}</td>
+            <td>{{ alumno.nombre }}</td>
+            <td>{{ alumno.apellido }}</td>
+            <td>{{ alumno.detallesAlumno.email }}</td>
+            <td>
+              <button (click)="detallesId(alumno.id)" class="btn btn-sm btn-info me-1" type="button"
+                data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                Detalles
+              </button>
+
+              <!-- Boton para editar -->
+              <button (click)="detallesId(alumno.id)" class="btn btn-sm btn-warning me-1" type="button"
+                data-bs-toggle="offcanvas" data-bs-target="#offcanvasEditar" aria-controls="offcanvasEditar">
+                Editar
+              </button>
+              <!-- ======================================== -->
+
+              <!-- MODAL ELIMINAR -->
+              <button (click)="detallesId(alumno.id)" type="button" class="btn btn-sm btn-danger me-1"
+                data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Eliminar
+              </button>
+
+              <!-- Modal de eliminar-->
+              <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="exampleModalLabel">Enviar a papelera</h1>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <b>ID: </b>{{alumnoId.id}} <b>Nombre: </b>{{alumnoId.nombre}} <br>
+                      ¿Estás seguro que deseas enviar el alumno a la Papelera? <br>
+                      Podrás restaurarlo más tarde
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancelar</button>
+                      <button (click)="deshabilitar(alumnoId.id)" type="button" class="btn btn-danger"
+                        data-bs-dismiss="modal">Aceptar</button>
+                      <!-- data-bs-dismiss="modal" IMPORTANTE ESTO -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight"
+                aria-labelledby="offcanvasRightLabel">
+                <div class="offcanvas-header">
+                  <h5 class="offcanvas-title" id="offcanvasRightLabel">
+                    Detalles del alumno
+                  </h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                  <b>Id: </b>
+                  <p>{{alumnoId.id}}</p>
+                  <b>Nombre: </b>
+                  <p>{{alumnoId.nombre}}</p>
+                  <b>Apellido: </b>
+                  <p>{{alumnoId.apellido}}</p>
+                  <b>Email: </b>
+                  <p>{{alumnoId.detallesAlumno.email}}</p>
+                  <b>Teléfono: </b>
+                  <p>{{alumnoId.detallesAlumno.telefono}}</p>
+                  <b>Edad: </b>
+                  <p>{{alumnoId.edad}}</p>
+                  <b>Dirección: </b>
+                  <p>{{alumnoId.detallesAlumno.direccion}}</p>
+                  <b>Habilitado: </b>
+                  <p *ngIf="alumnoId.habilitado==0; else siHabilitado" class="btn btn-danger">No</p>
+                  <ng-template #siHabilitado>
+                    <p class="btn btn-success">Sí</p>
+                  </ng-template>
+                </div>
+              </div>
+
+              <!-- CANVAS EDITAR -->
+              <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEditar"
+                aria-labelledby="offcanvasRightLabel">
+                <div class="offcanvas-header">
+                  <h5 class="offcanvas-title" id="offcanvasRightLabel">
+                    Editar alumno
+                  </h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+
+                  <form (ngSubmit)="editar(alumnoId.id, alumnoId)"novalidate #f="ngForm">
+                    <div class="">
+
+                      <span class="input-group-text"><b>ID: {{alumnoId.id}}</b> </span><br>
+
+                    </div>
+
+                    <div class="input-group mb-3">
+                      <span class="input-group-text">Nombre</span>
+                      <input [(ngModel)]="alumnoId.nombre" type="text" class="form-control" id="nombre"
+                        name="nombre" required><br>
+                    </div>
+
+                    <div class="input-group mb-3">
+                      <span class="input-group-text">Apellido</span>
+                      <input [(ngModel)]="alumnoId.apellido" type="text" class="form-control" id="apellido"
+                        name="apellido" required><br>
+                    </div>
+
+                    <div class="input-group mb-3">
+                      <span class="input-group-text">Email</span>
+                      <input [(ngModel)]="alumnoId.detallesAlumno.email" type="email" class="form-control" id="email"
+                        name="email" required><br>
+                    </div>
+
+                    <div class="input-group mb-3">
+                      <span class="input-group-text">Dirección</span>
+                      <input [(ngModel)]="alumnoId.detallesAlumno.direccion" type="text" class="form-control"
+                        id="direccion" name="direccion" required><br>
+                    </div>
+
+                    <div class="input-group mb-3">
+                      <span class="input-group-text">Teléfono</span>
+                      <input [(ngModel)]="alumnoId.detallesAlumno.telefono" type="text" class="form-control" id="telefono"
+                        name="telefono" required><br>
+                      <span class="input-group-text">Edad</span>
+                      <input [(ngModel)]="alumnoId.edad" type="number" class="form-control" id="edad" name="edad"
+                        required><br>
+                    </div>
+
+                    <button class="btn btn-primary" type="submit" [disabled]="!f.valid">Guardar</button>
+                  </form>
+                  <br>
+                  <p *ngIf="alumnoId.habilitado==0; else siHabilitado2" class="btn btn-danger"> Deshabilitado</p>
+                  <ng-template #siHabilitado2>
+                    <p class="btn btn-success"> Habilitado</p>
+                  </ng-template>
+                </div>
+              </div>
+
+              <!-- =============================================================================== -->
+
+
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+</div>
