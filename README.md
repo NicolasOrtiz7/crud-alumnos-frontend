@@ -1,5 +1,5 @@
 # AppCrud
-- Front end: Angular
+- Front end: Angular y Bootstrap
 - Back end: Spring boot
 - Base de datos: MySQL
 
